@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 
-@interface SACViewController : UIViewController
+@interface SACBodyAngleViewController : UIViewController<CBCentralManagerDelegate, CBPeripheralDelegate>
 
 @end

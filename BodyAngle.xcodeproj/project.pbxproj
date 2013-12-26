@@ -14,13 +14,14 @@
 		D832B5C71868E47300A650BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D832B5C61868E47300A650BC /* main.m */; };
 		D832B5CB1868E47300A650BC /* SACAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D832B5CA1868E47300A650BC /* SACAppDelegate.m */; };
 		D832B5CE1868E47300A650BC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D832B5CC1868E47300A650BC /* Main.storyboard */; };
-		D832B5D11868E47300A650BC /* SACViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D832B5D01868E47300A650BC /* SACViewController.m */; };
+		D832B5D11868E47300A650BC /* SACBodyAngleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D832B5D01868E47300A650BC /* SACBodyAngleViewController.m */; };
 		D832B5D31868E47300A650BC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D832B5D21868E47300A650BC /* Images.xcassets */; };
 		D832B5DA1868E47300A650BC /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832B5D91868E47300A650BC /* XCTest.framework */; };
 		D832B5DB1868E47300A650BC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832B5BA1868E47300A650BC /* Foundation.framework */; };
 		D832B5DC1868E47300A650BC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832B5BE1868E47300A650BC /* UIKit.framework */; };
 		D832B5E41868E47300A650BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D832B5E21868E47300A650BC /* InfoPlist.strings */; };
 		D832B5E61868E47300A650BC /* BodyAngleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D832B5E51868E47300A650BC /* BodyAngleTests.m */; };
+		D832B5F01868E48800A650BC /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832B5EF1868E48800A650BC /* CoreBluetooth.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,14 +46,15 @@
 		D832B5C91868E47300A650BC /* SACAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SACAppDelegate.h; sourceTree = "<group>"; };
 		D832B5CA1868E47300A650BC /* SACAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SACAppDelegate.m; sourceTree = "<group>"; };
 		D832B5CD1868E47300A650BC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		D832B5CF1868E47300A650BC /* SACViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SACViewController.h; sourceTree = "<group>"; };
-		D832B5D01868E47300A650BC /* SACViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SACViewController.m; sourceTree = "<group>"; };
+		D832B5CF1868E47300A650BC /* SACBodyAngleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SACBodyAngleViewController.h; sourceTree = "<group>"; };
+		D832B5D01868E47300A650BC /* SACBodyAngleViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SACBodyAngleViewController.m; sourceTree = "<group>"; };
 		D832B5D21868E47300A650BC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D832B5D81868E47300A650BC /* BodyAngleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BodyAngleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D832B5D91868E47300A650BC /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		D832B5E11868E47300A650BC /* BodyAngleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BodyAngleTests-Info.plist"; sourceTree = "<group>"; };
 		D832B5E31868E47300A650BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D832B5E51868E47300A650BC /* BodyAngleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BodyAngleTests.m; sourceTree = "<group>"; };
+		D832B5EF1868E48800A650BC /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D832B5F01868E48800A650BC /* CoreBluetooth.framework in Frameworks */,
 				D832B5BD1868E47300A650BC /* CoreGraphics.framework in Frameworks */,
 				D832B5BF1868E47300A650BC /* UIKit.framework in Frameworks */,
 				D832B5BB1868E47300A650BC /* Foundation.framework in Frameworks */,
@@ -101,6 +104,7 @@
 		D832B5B91868E47300A650BC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D832B5EF1868E48800A650BC /* CoreBluetooth.framework */,
 				D832B5BA1868E47300A650BC /* Foundation.framework */,
 				D832B5BC1868E47300A650BC /* CoreGraphics.framework */,
 				D832B5BE1868E47300A650BC /* UIKit.framework */,
@@ -115,8 +119,8 @@
 				D832B5C91868E47300A650BC /* SACAppDelegate.h */,
 				D832B5CA1868E47300A650BC /* SACAppDelegate.m */,
 				D832B5CC1868E47300A650BC /* Main.storyboard */,
-				D832B5CF1868E47300A650BC /* SACViewController.h */,
-				D832B5D01868E47300A650BC /* SACViewController.m */,
+				D832B5CF1868E47300A650BC /* SACBodyAngleViewController.h */,
+				D832B5D01868E47300A650BC /* SACBodyAngleViewController.m */,
 				D832B5D21868E47300A650BC /* Images.xcassets */,
 				D832B5C11868E47300A650BC /* Supporting Files */,
 			);
@@ -251,7 +255,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D832B5CB1868E47300A650BC /* SACAppDelegate.m in Sources */,
-				D832B5D11868E47300A650BC /* SACViewController.m in Sources */,
+				D832B5D11868E47300A650BC /* SACBodyAngleViewController.m in Sources */,
 				D832B5C71868E47300A650BC /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
