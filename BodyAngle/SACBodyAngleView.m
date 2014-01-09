@@ -28,7 +28,6 @@
 - (void)drawRect:(CGRect)rect
 {
   // For now, just draw a thick line displaying the current angle.
-  CGFloat midX = CGRectGetMidX(self.bounds);
   CGFloat midY = CGRectGetMidY(self.bounds);
   self.transform = CGAffineTransformMakeRotation(self.bodyAngle);
   CGContextRef context = UIGraphicsGetCurrentContext();
