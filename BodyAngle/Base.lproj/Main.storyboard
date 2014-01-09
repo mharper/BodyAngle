@@ -15,8 +15,32 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Device" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCv-s2-yql">
+                                <rect key="frame" x="89" y="438" width="142" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ej0-Sv-5Hn" customClass="SACBodyAngleView">
+                                <rect key="frame" x="60" y="184" width="200" height="200"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerY" secondItem="Ej0-Sv-5Hn" secondAttribute="centerY" id="5Xc-vR-5Ic"/>
+                            <constraint firstAttribute="centerX" secondItem="Ej0-Sv-5Hn" secondAttribute="centerX" id="AVF-uX-XiR"/>
+                            <constraint firstItem="2uk-rV-bhN" firstAttribute="top" secondItem="PCv-s2-yql" secondAttribute="bottom" constant="94" id="EjD-47-4nP"/>
+                            <constraint firstAttribute="centerX" secondItem="PCv-s2-yql" secondAttribute="centerX" id="qhr-8C-VoI"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="angleLabel" destination="PCv-s2-yql" id="74X-tC-weH"/>
+                        <outlet property="angleView" destination="Ej0-Sv-5Hn" id="IJF-Mp-8yE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>

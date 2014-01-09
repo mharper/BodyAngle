@@ -7,6 +7,7 @@
 //
 
 #import "SACBodyAngleViewController.h"
+#import "SACBodyAngleView.h"
 
 @interface CBUUID (StringExtraction)
 
@@ -34,7 +35,6 @@
       case 9:[outputString appendFormat:@"%02x-", uuidBytes[currentByteIndex]]; break;
       default:[outputString appendFormat:@"%02x", uuidBytes[currentByteIndex]];
     }
-    
   }
   
   return outputString;
@@ -47,6 +47,8 @@
 @property (strong, nonatomic) CBCentralManager *bluetoothManager;
 @property (strong, nonatomic) NSMutableArray *bluetoothDevices;
 @property (strong, nonatomic) CBPeripheral *sensorTag;
+@property (weak, nonatomic) IBOutlet UILabel *angleLabel;
+@property (weak, nonatomic) IBOutlet SACBodyAngleView *angleView;
 
 @end
 
@@ -112,7 +114,7 @@
     self.sensorTag = peripheral;
     [self releaseDevices];
     [self.bluetoothManager stopScan];
-    [self startMonitoringGyros:self.sensorTag];
+    [self startMonitoringAccelerometer:self.sensorTag];
   }
 }
 
@@ -128,13 +130,13 @@
   self.bluetoothDevices = nil;
 }
 
--(void) startMonitoringGyros:(CBPeripheral *) peripheral
+-(void) startMonitoringAccelerometer:(CBPeripheral *) peripheral
 {
-  CBUUID *gyroServiceId = [CBUUID UUIDWithString:@"F000AA50-0451-4000-B000-000000000000"];
+  CBUUID *accelerometerServiceId = [CBUUID UUIDWithString:@"F000AA10-0451-4000-B000-000000000000"];
   for (CBService *service in peripheral.services)
   {
     NSLog(@"Service UUID: %@", [service.UUID representativeString]);
-    if ([service.UUID isEqual:gyroServiceId])
+    if ([service.UUID isEqual:accelerometerServiceId])
     {
       [peripheral discoverCharacteristics:nil forService:service];
     }
@@ -143,40 +145,70 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
 {
-  CBUUID *gyroDataId = [CBUUID UUIDWithString:@"F000AA51-0451-4000-B000-000000000000"];
-  CBUUID *gyroConfigId = [CBUUID UUIDWithString:@"F000AA52-0451-4000-B000-000000000000"] ;
+  CBUUID *accelerometerDataId = [CBUUID UUIDWithString:@"F000AA11-0451-4000-B000-000000000000"];
+  CBUUID *accelerometerConfigId = [CBUUID UUIDWithString:@"F000AA12-0451-4000-B000-000000000000"] ;
+  CBUUID *accelerometerPeriodId = [CBUUID UUIDWithString:@"F000AA13-0451-4000-B000-000000000000"] ;
   for (CBCharacteristic *characteristic in service.characteristics)
   {
-    if ([characteristic.UUID isEqual:gyroDataId])
+    if ([characteristic.UUID isEqual:accelerometerDataId])
     {
       [peripheral setNotifyValue:YES forCharacteristic:characteristic];
     }
-    else if ([characteristic.UUID isEqual:gyroConfigId])
+    else if ([characteristic.UUID isEqual:accelerometerConfigId])
     {
       [peripheral setNotifyValue:YES forCharacteristic:characteristic];
-      uint8_t data = 0x07;
-      [peripheral writeValue:[NSData dataWithBytes:&data length:1] forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+      uint8_t configData = 0x01;
+      [peripheral writeValue:[NSData dataWithBytes:&configData length:1] forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+    }
+    else if ([characteristic.UUID isEqual:accelerometerPeriodId])
+    {
+      [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+      uint8_t periodData = 50;
+      [peripheral writeValue:[NSData dataWithBytes:&periodData length:1] forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
     }
   }
 }
 
 -(void) peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-  NSLog(@"Gyro data is: %@ (didUpdateNotificationStateForCharacteristic)", [self NSStringFromGyroData:characteristic.value]);
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-  NSLog(@"Gyro data is: %@ (didUpdateValueForCharacteristic)", [self NSStringFromGyroData:characteristic.value]);
+  [self updateAccelerometerDisplay:characteristic.value];
 }
 
--(NSString *) NSStringFromGyroData:(NSData *) gyroData
+-(NSString *) NSStringFromAccelerometerData:(NSData *) accelerometerData
 {
-  char rawGyroData[6];
+  char rawAccelerometerData[accelerometerData.length];
+  [accelerometerData getBytes:&rawAccelerometerData length:3];
+  float magicFactor = 256.0 / 4.0;
+  float x = ((float) rawAccelerometerData[0]) / magicFactor;
+  float y = ((float) rawAccelerometerData[1]) / magicFactor * -1.0;
+  float z = ((float) rawAccelerometerData[2]) / magicFactor;
+  
+  return [NSString stringWithFormat:@"X: %f, Y: %f, Z: %f, angle: %f", x, y, z, atan2(y, z)];
+}
 
-  [gyroData getBytes:&rawGyroData length:6];
-  int16_t rawX = ((rawGyroData[0] & 0xff) | ((rawGyroData[1] << 8) & 0xff00));
-  return [NSString stringWithFormat:@"X: %d", rawX];
+-(CGFloat) bodyAngleFromAccelerometer:(NSData *) accelerometerData
+{
+  char rawAccelerometerData[accelerometerData.length];
+  [accelerometerData getBytes:&rawAccelerometerData length:3];
+  float magicFactor = 256.0 / 4.0;
+  float y = ((float) rawAccelerometerData[1]) / magicFactor * -1.0;
+  float z = ((float) rawAccelerometerData[2]) / magicFactor;
+  return atan2(y, z);
+}
+
+-(NSString *) formattedBodyAngleFromAccelerometer:(NSData *) accelerometerData
+{
+  return [NSString stringWithFormat:@"%d°", (int) (([self bodyAngleFromAccelerometer:accelerometerData] / M_PI) * 180.0)];
+}
+
+-(void) updateAccelerometerDisplay:(NSData *) accelerometerData
+{
+  self.angleLabel.text = [self formattedBodyAngleFromAccelerometer:accelerometerData];
+  [self.angleView addBodyAngle:[self bodyAngleFromAccelerometer:accelerometerData]];
 }
 
 -(void) stopMonitoringGyros:(CBPeripheral *) peripheral
