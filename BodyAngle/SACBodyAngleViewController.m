@@ -8,6 +8,7 @@
 
 #import "SACBodyAngleViewController.h"
 #import "SACBodyAngleView.h"
+#import <CoreMotion/CoreMotion.h>
 
 @interface CBUUID (StringExtraction)
 
@@ -42,11 +43,18 @@
 
 @end
 
+enum SACDataSourceIndexEnum
+{
+  SACDataSourcePhoneIndex = 0,
+  SACDataSourceSensorTagIndex = 1
+};
+
 @interface SACBodyAngleViewController ()
 
 @property (strong, nonatomic) CBCentralManager *bluetoothManager;
 @property (strong, nonatomic) NSMutableArray *bluetoothDevices;
 @property (strong, nonatomic) CBPeripheral *sensorTag;
+@property (strong, nonatomic) CMMotionManager *motionManager;
 @property (weak, nonatomic) IBOutlet UILabel *angleLabel;
 @property (weak, nonatomic) IBOutlet SACBodyAngleView *angleView;
 @property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *portraitAngleLabelViewConstraints;
@@ -59,8 +67,7 @@
 -(void) viewDidLoad
 {
   [super viewDidLoad];
-  self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-  self.bluetoothDevices = [NSMutableArray array];
+  [self getAngleFromPhone];
 }
 
 -(void) awakeFromNib
@@ -93,7 +100,68 @@
 }
 
 #pragma mark -
+#pragma mark - CoreLocation methods
+
+-(void) getAngleFromPhone
+{
+  [self stopMonitoringSensorTag];
+  self.motionManager = [[CMMotionManager alloc] init];
+  self.motionManager.accelerometerUpdateInterval = 0.5;
+  [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
+                                           withHandler:^(CMAccelerometerData  *accelerometerData, NSError *error) {
+                                             if (error == nil)
+                                             {
+                                               [self updateAccelerometerDisplay:accelerometerData];
+                                             }
+                                             else
+                                             {
+                                               NSLog(@"%@", error);
+                                             }
+                                           }];
+}
+
+-(void) stopMonitoringPhoneMotion
+{
+  if (self.motionManager != nil)
+  {
+    [self.motionManager stopAccelerometerUpdates];
+  }
+}
+
+-(CGFloat) bodyAngleFromAccelerometer:(CMAccelerometerData *) accelerometerData
+{
+  return atan2(accelerometerData.acceleration.y, accelerometerData.acceleration.z);
+}
+
+-(NSString *) formattedBodyAngleFromAccelerometer:(CMAccelerometerData *) accelerometerData
+{
+  return [NSString stringWithFormat:@"%d°", (int) (([self bodyAngleFromAccelerometer:accelerometerData] / M_PI) * 180.0)];
+}
+
+-(void) updateAccelerometerDisplay:(CMAccelerometerData *) accelerometerData
+{
+  self.angleLabel.text = [self formattedBodyAngleFromAccelerometer:accelerometerData];
+  [self.angleView addBodyAngle:[self bodyAngleFromAccelerometer:accelerometerData]];
+}
+
+#pragma mark -
 #pragma mark - CBCentralManagerDelegate methods
+
+-(void) getAngleFromSensorTag
+{
+  [self stopMonitoringPhoneMotion];
+  self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+  self.bluetoothDevices = [NSMutableArray array];
+}
+
+-(void) stopMonitoringSensorTag
+{
+  if (self.sensorTag != nil)
+  {
+    // TODO Stop monitor the accelerometer characteristics.
+  }
+  self.bluetoothManager.delegate = nil;
+}
 
 -(void) centralManagerDidUpdateState:(CBCentralManager *) central
 {
@@ -192,7 +260,7 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-  [self updateAccelerometerDisplay:characteristic.value];
+  [self updateSensorTagDisplay:characteristic.value];
 }
 
 -(NSString *) NSStringFromAccelerometerData:(NSData *) accelerometerData
@@ -207,7 +275,7 @@
   return [NSString stringWithFormat:@"X: %f, Y: %f, Z: %f, angle: %f", x, y, z, atan2(y, z)];
 }
 
--(CGFloat) bodyAngleFromAccelerometer:(NSData *) accelerometerData
+-(CGFloat) bodyAngleFromSensorTag:(NSData *) accelerometerData
 {
   char rawAccelerometerData[accelerometerData.length];
   [accelerometerData getBytes:&rawAccelerometerData length:3];
@@ -217,20 +285,34 @@
   return atan2(y, z);
 }
 
--(NSString *) formattedBodyAngleFromAccelerometer:(NSData *) accelerometerData
+-(NSString *) formattedBodyAngleFromSensorTag:(NSData *) accelerometerData
 {
-  return [NSString stringWithFormat:@"%d°", (int) (([self bodyAngleFromAccelerometer:accelerometerData] / M_PI) * 180.0)];
+  return [NSString stringWithFormat:@"%d°", (int) (([self bodyAngleFromSensorTag:accelerometerData] / M_PI) * 180.0)];
 }
 
--(void) updateAccelerometerDisplay:(NSData *) accelerometerData
+-(void) updateSensorTagDisplay:(NSData *) accelerometerData
 {
-  self.angleLabel.text = [self formattedBodyAngleFromAccelerometer:accelerometerData];
-  [self.angleView addBodyAngle:[self bodyAngleFromAccelerometer:accelerometerData]];
+  self.angleLabel.text = [self formattedBodyAngleFromSensorTag:accelerometerData];
+  [self.angleView addBodyAngle:[self bodyAngleFromSensorTag:accelerometerData]];
 }
 
--(void) stopMonitoringAccelerometer:(CBPeripheral *) peripheral
+#pragma mark -
+#pragma mark IBActions
+
+-(IBAction)dataSourceAction:(id) sender
 {
-  
+  switch (((UISegmentedControl *) sender).selectedSegmentIndex) {
+    case SACDataSourcePhoneIndex:
+      [self getAngleFromPhone];
+      break;
+      
+    case SACDataSourceSensorTagIndex:
+      [self getAngleFromSensorTag];
+      break;
+      
+    default:
+      break;
+  }
 }
 
 @end

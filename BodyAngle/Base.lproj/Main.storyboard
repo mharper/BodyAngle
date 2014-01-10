@@ -32,6 +32,17 @@
                                     <constraint firstAttribute="width" constant="200" id="sy3-IB-OOg"/>
                                 </constraints>
                             </view>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="tD9-Fp-r85">
+                                <rect key="frame" x="82" y="28" width="157" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Phone"/>
+                                    <segment title="SensorTag"/>
+                                </segments>
+                                <connections>
+                                    <action selector="dataSourceAction:" destination="vXZ-lx-hvc" eventType="valueChanged" id="JRO-nq-y9q"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -41,6 +52,8 @@
                             <constraint firstItem="2uk-rV-bhN" firstAttribute="top" secondItem="PCv-s2-yql" secondAttribute="bottom" constant="94" id="EjD-47-4nP"/>
                             <constraint firstAttribute="trailing" secondItem="PCv-s2-yql" secondAttribute="trailing" constant="20" symbolic="YES" id="Qzg-CF-84h"/>
                             <constraint firstAttribute="centerX" secondItem="PCv-s2-yql" secondAttribute="centerX" id="qhr-8C-VoI"/>
+                            <constraint firstAttribute="centerX" secondItem="tD9-Fp-r85" secondAttribute="centerX" id="sze-UR-ivi"/>
+                            <constraint firstItem="tD9-Fp-r85" firstAttribute="top" secondItem="rKu-J2-Iak" secondAttribute="bottom" constant="20" symbolic="YES" id="tqR-px-MIu"/>
                         </constraints>
                     </view>
                     <connections>

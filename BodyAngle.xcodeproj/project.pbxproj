@@ -23,6 +23,7 @@
 		D832B5E61868E47300A650BC /* BodyAngleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D832B5E51868E47300A650BC /* BodyAngleTests.m */; };
 		D832B5F01868E48800A650BC /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832B5EF1868E48800A650BC /* CoreBluetooth.framework */; };
 		D8626476187E20930079DF31 /* SACBodyAngleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8626475187E20930079DF31 /* SACBodyAngleView.m */; };
+		D8626478187F79810079DF31 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8626477187F79810079DF31 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		D832B5EF1868E48800A650BC /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		D8626474187E20930079DF31 /* SACBodyAngleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SACBodyAngleView.h; sourceTree = "<group>"; };
 		D8626475187E20930079DF31 /* SACBodyAngleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SACBodyAngleView.m; sourceTree = "<group>"; };
+		D8626477187F79810079DF31 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8626478187F79810079DF31 /* CoreMotion.framework in Frameworks */,
 				D832B5F01868E48800A650BC /* CoreBluetooth.framework in Frameworks */,
 				D832B5BD1868E47300A650BC /* CoreGraphics.framework in Frameworks */,
 				D832B5BF1868E47300A650BC /* UIKit.framework in Frameworks */,
@@ -107,6 +110,7 @@
 		D832B5B91868E47300A650BC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D8626477187F79810079DF31 /* CoreMotion.framework */,
 				D832B5EF1868E48800A650BC /* CoreBluetooth.framework */,
 				D832B5BA1868E47300A650BC /* Foundation.framework */,
 				D832B5BC1868E47300A650BC /* CoreGraphics.framework */,
