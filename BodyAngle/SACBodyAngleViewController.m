@@ -49,6 +49,8 @@
 @property (strong, nonatomic) CBPeripheral *sensorTag;
 @property (weak, nonatomic) IBOutlet UILabel *angleLabel;
 @property (weak, nonatomic) IBOutlet SACBodyAngleView *angleView;
+@property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *portraitAngleLabelViewConstraints;
+@property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *landscapeAngleLabelViewConstraints;
 
 @end
 
@@ -56,14 +58,38 @@
 
 -(void) viewDidLoad
 {
-    [super viewDidLoad];
+  [super viewDidLoad];
   self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
   self.bluetoothDevices = [NSMutableArray array];
 }
 
--(void) didReceiveMemoryWarning
+-(void) awakeFromNib
 {
-    [super didReceiveMemoryWarning];
+  [super awakeFromNib];
+  [self adjustLayoutConstraintsForOrientation:self.interfaceOrientation];
+}
+
+#pragma mark -
+#pragma mark - Rotation/Layout methods
+
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval) duration
+{
+  [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+  [self adjustLayoutConstraintsForOrientation:toInterfaceOrientation];
+}
+
+-(void) adjustLayoutConstraintsForOrientation:(UIInterfaceOrientation) orientation
+{
+  [self.view removeConstraints:self.portraitAngleLabelViewConstraints];
+  [self.view removeConstraints:self.landscapeAngleLabelViewConstraints];
+  if (UIInterfaceOrientationIsPortrait(orientation))
+  {
+    [self.view addConstraints:self.portraitAngleLabelViewConstraints];
+  }
+  else
+  {
+    [self.view addConstraints:self.landscapeAngleLabelViewConstraints];
+  }
 }
 
 #pragma mark -
@@ -79,15 +105,7 @@
 
 -(void) centralManager:(CBCentralManager *) central didDiscoverPeripheral:(CBPeripheral *) peripheral advertisementData:(NSDictionary *) advertisementData RSSI:(NSNumber *) rssi
 {
-  
   NSLog(@"Found a BLE Device : %@", peripheral);
-  
-  /* iOS 6.0 bug workaround : connect to device before displaying UUID !
-   The reason for this is that the CFUUID .UUID property of CBPeripheral
-   here is null the first time an unkown (never connected before in any app)
-   peripheral is connected. So therefore we connect to all peripherals we find.
-   */
-  
   peripheral.delegate = self;
   [central connectPeripheral:peripheral options:nil];
   [self.bluetoothDevices addObject:peripheral];
@@ -210,7 +228,7 @@
   [self.angleView addBodyAngle:[self bodyAngleFromAccelerometer:accelerometerData]];
 }
 
--(void) stopMonitoringGyros:(CBPeripheral *) peripheral
+-(void) stopMonitoringAccelerometer:(CBPeripheral *) peripheral
 {
   
 }

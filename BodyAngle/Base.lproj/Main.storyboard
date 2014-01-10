@@ -16,8 +16,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Device" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCv-s2-yql">
-                                <rect key="frame" x="89" y="438" width="142" height="36"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="No Device" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCv-s2-yql">
+                                <rect key="frame" x="158" y="438" width="142" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -35,15 +35,21 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="centerY" secondItem="PCv-s2-yql" secondAttribute="centerY" id="2Ra-lA-3bn"/>
                             <constraint firstAttribute="centerY" secondItem="Ej0-Sv-5Hn" secondAttribute="centerY" id="5Xc-vR-5Ic"/>
                             <constraint firstAttribute="centerX" secondItem="Ej0-Sv-5Hn" secondAttribute="centerX" id="AVF-uX-XiR"/>
                             <constraint firstItem="2uk-rV-bhN" firstAttribute="top" secondItem="PCv-s2-yql" secondAttribute="bottom" constant="94" id="EjD-47-4nP"/>
+                            <constraint firstAttribute="trailing" secondItem="PCv-s2-yql" secondAttribute="trailing" constant="20" symbolic="YES" id="Qzg-CF-84h"/>
                             <constraint firstAttribute="centerX" secondItem="PCv-s2-yql" secondAttribute="centerX" id="qhr-8C-VoI"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="angleLabel" destination="PCv-s2-yql" id="74X-tC-weH"/>
                         <outlet property="angleView" destination="Ej0-Sv-5Hn" id="IJF-Mp-8yE"/>
+                        <outletCollection property="portraitAngleLabelViewConstraints" destination="qhr-8C-VoI" id="iek-ga-f7s"/>
+                        <outletCollection property="portraitAngleLabelViewConstraints" destination="EjD-47-4nP" id="TKi-Yz-s26"/>
+                        <outletCollection property="landscapeAngleLabelViewConstraints" destination="Qzg-CF-84h" id="bZv-6w-9XO"/>
+                        <outletCollection property="landscapeAngleLabelViewConstraints" destination="2Ra-lA-3bn" id="ryn-ye-Vz5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
